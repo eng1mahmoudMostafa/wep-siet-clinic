@@ -9,8 +9,8 @@
  * 3. احفظ التعديل (Ctrl+S) ثم انشر بالضغط على Deploy -> Manage deployments -> تعديل -> New version -> Deploy.
  */
 
-// ضع رابط شيت جوجل الخاص بك هنا (أو معرف ID الشيت):
-var SPREADSHEET_URL = ""; 
+// رابط ومعرف جدول شيت عيادة NileCare:
+var SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1c1Tgyev59QvcaLFW1McbeA24GVr7odtMVul5Ygs1z2A/edit"; 
 
 function getTargetSheet() {
   // 1. إذا تم وضع رابط الشيت بالمتغير أعلاه
