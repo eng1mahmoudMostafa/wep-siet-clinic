@@ -143,7 +143,10 @@
     </div>
   </footer>
 
-  <script>
+    <script>
+  // CONFIG: استبدل الرابط برابط Google Apps Script Web App الخاص بك
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
   document.addEventListener('DOMContentLoaded', function () {
     const params = new URLSearchParams(window.location.search);
     const deptParam = params.get('dept');
@@ -155,21 +158,17 @@
     const mobileInput = document.getElementById('mobile');
     const mobileError = document.getElementById('mobile-error');
     const statusBox = document.getElementById('booking-status');
+    const submitBtn = form.querySelector('button[type="submit"]');
 
-    // 1. ضبط أقل تاريخ مسموح به ليكون تاريخ اليوم
     const todayStr = new Date().toISOString().split('T')[0];
     const dateInput = document.getElementById('preferred-date');
-    if (dateInput) {
-      dateInput.min = todayStr;
-    }
+    if (dateInput) { dateInput.min = todayStr; }
 
     if (deptParam && deptSelect) {
       const matchedOption = Array.from(deptSelect.options).find(
         opt => opt.value.toLowerCase() === deptParam.trim().toLowerCase()
       );
-      if (matchedOption) {
-        deptSelect.value = matchedOption.value;
-      }
+      if (matchedOption) { deptSelect.value = matchedOption.value; }
     }
 
     if (doctorParam && doctorInput) {
@@ -178,56 +177,72 @@
 
     const mobileRegex = /^01[0125][0-9]{8}$/;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    function showStatus(message, type) {
+      statusBox.style.display = 'block';
+      statusBox.style.background = type === 'success' ? '#ecfdf5' : '#fef2f2';
+      statusBox.style.color = type === 'success' ? '#065f46' : '#991b1b';
+      statusBox.textContent = message;
+    }
 
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
       const nameVal = document.getElementById('patient-name').value.trim();
       const mobileVal = mobileInput.value.trim();
       const deptVal = deptSelect.value.trim();
       const dateVal = dateInput ? dateInput.value.trim() : '';
       const referralVal = document.getElementById('referral').value.trim();
+      const doctorVal = doctorInput ? doctorInput.value.trim() : '';
 
       mobileError.style.display = 'none';
       statusBox.style.display = 'none';
 
-      // 2. التحقق من صحة التاريخ وعدم اختيار تاريخ قديم أو سنة خاطئة
       if (!dateVal || dateVal < todayStr) {
-        statusBox.style.display = 'block';
-        statusBox.style.background = '#fef2f2';
-        statusBox.style.color = '#991b1b';
-        statusBox.textContent = 'Please select today or a valid upcoming date (e.g. 2026).';
+        showStatus('Please select today or a valid upcoming date.', 'error');
         return;
       }
-
       if (!nameVal || !deptVal || !referralVal) {
-        statusBox.style.display = 'block';
-        statusBox.style.background = '#fef2f2';
-        statusBox.style.color = '#991b1b';
-        statusBox.textContent = 'Please fill in all required fields before submitting.';
+        showStatus('Please fill in all required fields before submitting.', 'error');
         return;
       }
-
       if (!mobileRegex.test(mobileVal)) {
         mobileError.style.display = 'block';
         mobileInput.focus();
         return;
       }
 
-      statusBox.style.display = 'block';
-      statusBox.style.background = '#ecfdf5';
-      statusBox.style.color = '#065f46';
-      statusBox.textContent =
-        'Booking request validated for ' +
-        nameVal +
-        ' (' +
-        deptVal +
-        (doctorInput.value.trim() ? ' - ' + doctorInput.value.trim() : '') +
-        ') on ' +
-        dateVal +
-        '.';
+      const bookingData = {
+        name: nameVal, mobile: mobileVal, department: deptVal,
+        doctor: doctorVal, date: dateVal, referral: referralVal,
+        timestamp: new Date().toISOString()
+      };
+
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST', mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookingData)
+        });
+        const result = await response.json();
+        if (result.success) {
+          showStatus('✅ تم إرسال طلب الحجز بنجاح! سيتم التواصل معك قريباً.', 'success');
+          form.reset();
+        } else {
+          showStatus('❌ حدث خطأ: ' + (result.message || 'حاول مرة أخرى لاحقاً'), 'error');
+        }
+      } catch (error) {
+        console.error('Booking error:', error);
+        showStatus('❌ فشل الاتصال بالخادم. يرجى المحاولة مرة أخرى.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
     });
   });
-</script>
+  </script>
   <script src="js/script.js"></script>
 </body>
 </html>
