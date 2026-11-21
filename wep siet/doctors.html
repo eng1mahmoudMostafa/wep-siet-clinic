@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Doctors | NileCare Healthcare</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-wrapper">
+      <div class="brand">
+        <div class="brand-logo">NC</div>
+        <div class="brand-name">Nile<span>Care</span></div>
+      </div>
+      <nav class="nav-links" role="navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html">Our Services</a>
+        <a href="doctors.html" class="active">Doctors</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="booking.html" class="nav-cta">Book Now</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </nav>
+    </div>
+    <div class="mobile-menu">
+      <button class="mobile-menu-close" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <a href="index.html">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="services.html">Our Services</a>
+      <a href="doctors.html" class="active">Doctors</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="booking.html" class="nav-cta">Book Now</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="doctors-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Meet Our Doctors</h2>
+          <p>Qualified specialists with proven clinical experience, dedicated to patient-first care.</p>
+        </div>
+
+        <div class="filter-bar" role="group" aria-label="Filter doctors by specialty">
+          <button type="button" class="filter-btn active" data-filter="All">All Doctors</button>
+          <button type="button" class="filter-btn" data-filter="Cardiology">Cardiology</button>
+          <button type="button" class="filter-btn" data-filter="Orthopedics">Orthopedics</button>
+          <button type="button" class="filter-btn" data-filter="Pediatrics">Pediatrics</button>
+          <button type="button" class="filter-btn" data-filter="Dentistry">Dentistry</button>
+          <button type="button" class="filter-btn" data-filter="Internal Medicine">Internal Medicine</button>
+          <button type="button" class="filter-btn" data-filter="Dermatology">Dermatology</button>
+        </div>
+
+        <div class="doctors-grid">
+          <!-- Doctor 1 -->
+          <article class="doctor-card" data-specialty="Cardiology">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-kareem.jpg"
+                alt="Dr. Kareem Mansour"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Cardiology</span>
+              <h3>Dr. Kareem Mansour</h3>
+              <p class="doctor-bio">Focuses on accurate cardiac diagnostics, hypertension management, and preventive heart care with calm, clear follow-ups.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> MD, MSc Cardiology, Cardiology Fellowship</li>
+                <li><strong>Experience:</strong> 12+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Sat – Thu • 10:00 AM – 4:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Cardiology&doctor=Dr.%20Kareem%20Mansour" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+
+          <!-- Doctor 2 -->
+          <article class="doctor-card" data-specialty="Orthopedics">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-hala.jpg"
+                alt="Dr. Hala El-Sayed"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Orthopedics</span>
+              <h3>Dr. Hala El-Sayed</h3>
+              <p class="doctor-bio">Helps patients recover mobility and relieve joint, back, or sports-related pain through structured treatment plans.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> MD Orthopedics, Sports Medicine Diploma</li>
+                <li><strong>Experience:</strong> 9+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Sun – Wed • 12:00 PM – 6:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Orthopedics&doctor=Dr.%20Hala%20El-Sayed" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+
+          <!-- Doctor 3 -->
+          <article class="doctor-card" data-specialty="Pediatrics">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-omar.jpg"
+                alt="Dr. Omar Farouk"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Pediatrics</span>
+              <h3>Dr. Omar Farouk</h3>
+              <p class="doctor-bio">Provides gentle checkups, growth tracking, and parent guidance for infants, children, and adolescents.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> MSc Pediatrics, Pediatric Nutrition Certified</li>
+                <li><strong>Experience:</strong> 8+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Sat – Thu • 2:00 PM – 8:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Pediatrics&doctor=Dr.%20Omar%20Farouk" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+
+          <!-- Doctor 4 -->
+          <article class="doctor-card" data-specialty="Dentistry">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-salma.jpg"
+                alt="Dr. Salma Nabil"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Dentistry</span>
+              <h3>Dr. Salma Nabil</h3>
+              <p class="doctor-bio">Combines gentle dental care, preventive cleanings, and aesthetic restorations for comfortable visits.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> BDS, MSc Restorative &amp; Esthetic Dentistry</li>
+                <li><strong>Experience:</strong> 7+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Mon – Sat • 11:00 AM – 7:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Dentistry&doctor=Dr.%20Salma%20Nabil" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+
+          <!-- Doctor 5 -->
+          <article class="doctor-card" data-specialty="Internal Medicine">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-youssef.jpg"
+                alt="Dr. Youssef Abdelrahman"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Internal Medicine</span>
+              <h3>Dr. Youssef Abdelrahman</h3>
+              <p class="doctor-bio">Specializes in chronic condition care, diabetes and metabolic checkups, and comprehensive adult evaluations.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> MD Internal Medicine, Clinical Diabetes Diploma</li>
+                <li><strong>Experience:</strong> 11+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Sun – Thu • 9:00 AM – 3:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Internal%20Medicine&doctor=Dr.%20Youssef%20Abdelrahman" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+
+          <!-- Doctor 6 -->
+          <article class="doctor-card" data-specialty="Dermatology">
+            <div class="doctor-photo-wrap">
+              <img
+                src="images/dr-mariam.jpg"
+                alt="Dr. Mariam Hassan"
+                class="doctor-photo"
+                onerror="this.src='https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=600&q=80';"
+              >
+            </div>
+            <div class="doctor-body">
+              <span class="doctor-specialty">Dermatology</span>
+              <h3>Dr. Mariam Hassan</h3>
+              <p class="doctor-bio">Treats skin conditions, acne, eczema, and hair concerns using evidence-based dermatological protocols.</p>
+              <ul class="doctor-details">
+                <li><strong>Credentials:</strong> MSc Dermatology &amp; Venereology, Laser Certified</li>
+                <li><strong>Experience:</strong> 6+ Years Clinical Experience</li>
+                <li><strong>Hours:</strong> Sat, Mon, Wed • 1:00 PM – 7:00 PM</li>
+              </ul>
+              <a href="booking.html?dept=Dermatology&doctor=Dr.%20Mariam%20Hassan" class="btn btn-primary doctor-btn">Book Appointment</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-md);">
+          <div class="brand-logo">NC</div>
+          <div class="brand-name" style="font-size:1.25rem;">Nile<span>Care</span></div>
+        </div>
+        <p>Providing compassionate, professional healthcare services to our community with excellence and integrity.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Our Services</a></li>
+          <li><a href="doctors.html">Doctors</a></li>
+          <li><a href="booking.html">Book Appointment</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+201234567890">+20 123 456 7890</a></li>
+          <li><a href="mailto:info@nilecare.com">info@nilecare.com</a></li>
+          <li><a href="#">Cairo, Egypt</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      &copy; 2026 NileCare Healthcare. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
