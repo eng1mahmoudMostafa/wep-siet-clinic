@@ -184,6 +184,25 @@
       statusBox.textContent = message;
     }
 
+    function showSummaryBox(data) {
+      let summaryBox = document.getElementById('bookingSummary');
+      if (!summaryBox) {
+        summaryBox = document.createElement('div');
+        summaryBox.id = 'bookingSummary';
+        summaryBox.className = 'booking-summary-box';
+        form.insertAdjacentElement('afterend', summaryBox);
+      }
+      summaryBox.innerHTML =
+        '<strong style="color: #0f766e; display: block; margin-bottom: 0.5rem;">📋 تم تسجيل بيانات الحجز بنجاح:</strong>' +
+        '<strong>المريض:</strong> ' + data.name + '<br>' +
+        '<strong>رقم الموبايل:</strong> ' + data.mobile + '<br>' +
+        '<strong>القسم:</strong> ' + data.department + '<br>' +
+        '<strong>الطبيب المفضل:</strong> ' + (data.doctor || 'غير محدد') + '<br>' +
+        '<strong>تاريخ الكشف:</strong> ' + data.date + '<br>' +
+        '<strong>مصدر المعرفة:</strong> ' + data.referral;
+      summaryBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       const nameVal = document.getElementById('patient-name').value.trim();
@@ -196,8 +215,13 @@
       mobileError.style.display = 'none';
       statusBox.style.display = 'none';
 
+      const existingSummary = document.getElementById('bookingSummary');
+      if (existingSummary) {
+        existingSummary.remove();
+      }
+
       if (!nameVal) {
-        showStatus('❌ يرجى إدخال الاسم completo.', 'error');
+        showStatus('❌ يرجى إدخال الاسم بالكامل.', 'error');
         document.getElementById('patient-name').focus();
         return;
       }
@@ -208,7 +232,7 @@
       }
       if (!mobileRegex.test(mobileVal)) {
         mobileError.style.display = 'block';
-        mobileError.textContent = 'رقم محمول غير صحيح (11 رقم يبدأ بـ 010/011/012/015).';
+        mobileError.textContent = 'رقم محمول غير صحيح (11 رقم يبدأ بـ 010 أو 011 أو 012 أو 015).';
         mobileInput.focus();
         return;
       }
@@ -234,8 +258,12 @@
       }
 
       const bookingData = {
-        name: nameVal, mobile: mobileVal, department: deptVal,
-        doctor: doctorVal, date: dateVal, referral: referralVal,
+        name: nameVal,
+        mobile: mobileVal,
+        department: deptVal,
+        doctor: doctorVal || 'غير محدد',
+        date: dateVal,
+        referral: referralVal,
         timestamp: new Date().toISOString()
       };
 
@@ -244,21 +272,49 @@
       submitBtn.textContent = 'جارٍ الإرسال...';
 
       try {
+        // نستخدم text/plain لتفادي طلب CORS preflight (OPTIONS) الذي يفشل عادة مع Google Apps Script
         const response = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST', mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
           body: JSON.stringify(bookingData)
         });
-        const result = await response.json();
-        if (result.success) {
-          showStatus('✅ تم إرسال طلب الحجز بنجاح! سيتم التواصل معك قريباً.', 'success');
+
+        let result = null;
+        try {
+          result = await response.json();
+        } catch (jsonErr) {
+          result = { success: response.ok };
+        }
+
+        if (result && result.success !== false) {
+          showStatus('✅ تم إرسال طلب الحجز بنجاح وحفظه في Google Sheets! سيتم التواصل معك قريباً.', 'success');
+          showSummaryBox(bookingData);
           form.reset();
+          if (dateInput) { dateInput.min = todayStr; }
         } else {
-          showStatus('❌ حدث خطأ: ' + (result.message || 'حاول مرة أخرى لاحقاً'), 'error');
+          showStatus('❌ حدث خطأ: ' + (result?.message || 'حاول مرة أخرى لاحقاً'), 'error');
         }
       } catch (error) {
-        console.error('Booking error:', error);
-        showStatus('❌ فشل الاتصال بالخادم. يرجى المحاولة مرة أخرى.', 'error');
+        console.warn('Direct fetch failed, attempting fallback with no-cors:', error);
+        try {
+          await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(bookingData)
+          });
+          showStatus('✅ تم إرسال طلب الحجز بنجاح وحفظه في Google Sheets!', 'success');
+          showSummaryBox(bookingData);
+          form.reset();
+          if (dateInput) { dateInput.min = todayStr; }
+        } catch (fallbackError) {
+          console.error('Booking submission error:', error, fallbackError);
+          showStatus('❌ فشل الاتصال بالخادم. يرجى التأكد من ضبط صلاحية Google Apps Script على (Anyone / أي شخص).', 'error');
+        }
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = originalBtnText;

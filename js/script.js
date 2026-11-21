@@ -62,6 +62,9 @@ function initBookingForm() {
   const bookingForm = document.getElementById('booking-form');
   if (!bookingForm) return;
 
+  // If APPS_SCRIPT_URL is defined, booking.html handles its own form submission with Google Sheets
+  if (typeof APPS_SCRIPT_URL !== 'undefined') return;
+
   const nameInput = document.getElementById('name');
   const mobileInput = document.getElementById('mobile');
   const serviceInput = document.getElementById('service');
@@ -220,55 +223,57 @@ document.addEventListener("DOMContentLoaded", function () {
     notesInput.value = "Preferred Doctor: " + doctorParam;
   }
 
-  // 3. Structured Booking Summary after Form Submission
+  // 3. Structured Booking Summary after Form Submission (only when APPS_SCRIPT_URL is not present)
   const bookingForm =
     document.getElementById("bookingForm") ||
     document.querySelector("form.booking-form") ||
     document.querySelector("form");
 
   if (bookingForm && window.location.pathname.toLowerCase().includes("booking")) {
-    bookingForm.addEventListener("submit", function (e) {
-      const nameInput =
-        document.getElementById("fullName") ||
-        document.getElementById("name") ||
-        bookingForm.querySelector('input[type="text"]');
-      const phoneInput =
-        document.getElementById("phone") ||
-        bookingForm.querySelector('input[type="tel"]');
-      const dateInput =
-        document.getElementById("date") ||
-        bookingForm.querySelector('input[type="date"]');
+    if (typeof APPS_SCRIPT_URL === 'undefined') {
+      bookingForm.addEventListener("submit", function (e) {
+        const nameInput =
+          document.getElementById("fullName") ||
+          document.getElementById("name") ||
+          bookingForm.querySelector('input[type="text"]');
+        const phoneInput =
+          document.getElementById("phone") ||
+          bookingForm.querySelector('input[type="tel"]');
+        const dateInput =
+          document.getElementById("date") ||
+          bookingForm.querySelector('input[type="date"]');
 
-      const nameVal = nameInput ? nameInput.value.trim() : "";
-      const phoneVal = phoneInput ? phoneInput.value.trim() : "";
-      const deptVal = deptSelect ? deptSelect.value : "";
-      const dateVal = dateInput ? dateInput.value : "";
-      const notesVal = notesInput ? notesInput.value.trim() : "";
+        const nameVal = nameInput ? nameInput.value.trim() : "";
+        const phoneVal = phoneInput ? phoneInput.value.trim() : "";
+        const deptVal = deptSelect ? deptSelect.value : "";
+        const dateVal = dateInput ? dateInput.value : "";
+        const notesVal = notesInput ? notesInput.value.trim() : "";
 
-      const egyptPhoneRegex = /^01[0125][0-9]{8}$/;
-      const todayStr = new Date().toISOString().split("T")[0];
+        const egyptPhoneRegex = /^01[0125][0-9]{8}$/;
+        const todayStr = new Date().toISOString().split("T")[0];
 
-      if (!nameVal || !egyptPhoneRegex.test(phoneVal) || !deptVal || !dateVal || dateVal < todayStr) {
-        return;
-      }
+        if (!nameVal || !egyptPhoneRegex.test(phoneVal) || !deptVal || !dateVal || dateVal < todayStr) {
+          return;
+        }
 
-      e.preventDefault();
+        e.preventDefault();
 
-      let summaryBox = document.getElementById("bookingSummary");
-      if (!summaryBox) {
-        summaryBox = document.createElement("div");
-        summaryBox.id = "bookingSummary";
-        summaryBox.className = "booking-summary-box";
-        bookingForm.insertAdjacentElement("afterend", summaryBox);
-      }
+        let summaryBox = document.getElementById("bookingSummary");
+        if (!summaryBox) {
+          summaryBox = document.createElement("div");
+          summaryBox.id = "bookingSummary";
+          summaryBox.className = "booking-summary-box";
+          bookingForm.insertAdjacentElement("afterend", summaryBox);
+        }
 
-      summaryBox.innerHTML =
-        "<strong>Appointment Request Prepared</strong><br>" +
-        "Patient: " + nameVal + "<br>" +
-        "Mobile: " + phoneVal + "<br>" +
-        "Department: " + deptVal + "<br>" +
-        "Preferred Date: " + dateVal +
-        (notesVal ? "<br>Notes: " + notesVal : "");
-    });
+        summaryBox.innerHTML =
+          "<strong>Appointment Request Prepared</strong><br>" +
+          "Patient: " + nameVal + "<br>" +
+          "Mobile: " + phoneVal + "<br>" +
+          "Department: " + deptVal + "<br>" +
+          "Preferred Date: " + dateVal +
+          (notesVal ? "<br>Notes: " + notesVal : "");
+      });
+    }
   }
-});x``
+});
