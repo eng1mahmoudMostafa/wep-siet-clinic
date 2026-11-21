@@ -196,17 +196,40 @@
       mobileError.style.display = 'none';
       statusBox.style.display = 'none';
 
-      if (!dateVal || dateVal < todayStr) {
-        showStatus('Please select today or a valid upcoming date.', 'error');
+      if (!nameVal) {
+        showStatus('❌ يرجى إدخال الاسم completo.', 'error');
+        document.getElementById('patient-name').focus();
         return;
       }
-      if (!nameVal || !deptVal || !referralVal) {
-        showStatus('Please fill in all required fields before submitting.', 'error');
+      if (!mobileVal) {
+        showStatus('❌ يرجى إدخال رقم الموبايل.', 'error');
+        mobileInput.focus();
         return;
       }
       if (!mobileRegex.test(mobileVal)) {
         mobileError.style.display = 'block';
+        mobileError.textContent = 'رقم محمول غير صحيح (11 رقم يبدأ بـ 010/011/012/015).';
         mobileInput.focus();
+        return;
+      }
+      if (!deptVal || deptVal === '') {
+        showStatus('❌ يرجى اختيار القسم الطبي.', 'error');
+        deptSelect.focus();
+        return;
+      }
+      if (!dateVal) {
+        showStatus('❌ يرجى اختيار التاريخ المفضل.', 'error');
+        dateInput.focus();
+        return;
+      }
+      if (dateVal < todayStr) {
+        showStatus('❌ يرجى اختيار تاريخ اليوم أو تاريخ قادم.', 'error');
+        dateInput.focus();
+        return;
+      }
+      if (!referralVal || referralVal === '') {
+        showStatus('❌ يرجى اختيار كيف عرفت عنا.', 'error');
+        document.getElementById('referral').focus();
         return;
       }
 
@@ -218,7 +241,7 @@
 
       const originalBtnText = submitBtn.textContent;
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
+      submitBtn.textContent = 'جارٍ الإرسال...';
 
       try {
         const response = await fetch(APPS_SCRIPT_URL, {
